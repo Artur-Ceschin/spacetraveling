@@ -5,6 +5,7 @@ import Prismic from '@prismicio/client';
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import Head from 'next/head';
 import Header from '../components/Header';
 
 import { getPrismicClient } from '../services/prismic';
@@ -45,7 +46,7 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
     };
   });
 
-  console.log(postsPagination.next_page);
+  // console.log(postsPagination.next_page);
 
   const [posts, setPosts] = useState<Post[]>(formattedPost);
   const [nextPage, setNextPage] = useState(postsPagination.next_page);
@@ -59,6 +60,8 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
     const postsResults = await fetch(`${nextPage}`).then(response =>
       response.json()
     );
+
+    console.log(postsResults);
 
     setNextPage(postsResults.next_page);
     setCurrentPage(postsResults.page);
@@ -85,6 +88,9 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
   }
   return (
     <>
+      <Head>
+        <title>Home | spacetraveling</title>
+      </Head>
       <main className={commonStyles.container}>
         <Header />
 
@@ -107,9 +113,11 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
               </a>
             </Link>
           ))}
-          <button type="button" onClick={handleNextPage}>
-            Carregar mais posts
-          </button>
+          {nextPage && (
+            <button type="button" onClick={handleNextPage}>
+              Carregar mais posts
+            </button>
+          )}
         </div>
       </main>
     </>
@@ -119,7 +127,7 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
 export const getStaticProps: GetStaticProps = async () => {
   const prismic = getPrismicClient();
   const postsResponse = await prismic.query(
-    [Prismic.predicates.at('document.type', 'post')],
+    [Prismic.predicates.at('document.type', 'posts')],
     { pageSize: 1 }
   );
 
