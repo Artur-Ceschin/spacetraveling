@@ -27,6 +27,7 @@
 * [React](https://pt-br.reactjs.org/E)
 * [Next.js](https://nextjs.org/)
 * [Prismic CMS](https://prismic.io/)
+* [Utteranc](https://utteranc.es/)
 
 &nbsp;
 
